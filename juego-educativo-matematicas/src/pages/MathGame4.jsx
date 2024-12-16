@@ -71,7 +71,7 @@ const MathGame4 = () => {
   };
 
   const handleNext = () => {
-    navigate('/some-next-route'); // Reemplaza con la ruta del siguiente juego o sección
+    navigate('/home'); // Reemplaza con la ruta del siguiente juego o sección
   };
 
   // Función para manejar accesibilidad con teclas 1, 2, 3, 4

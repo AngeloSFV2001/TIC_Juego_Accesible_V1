@@ -9,6 +9,8 @@ import MathGame2 from './pages/MathGame2';
 import MathGame3 from './pages/MathGame3';
 import MathGame4 from './pages/MathGame4';
 import Summary from './pages/Summary';
+import SequenceIntro from './pages/SequenceIntro';
+import SequenceGame1 from './pages/SequenceGame1';
 
 const App = () => {
   return (
@@ -24,6 +26,8 @@ const App = () => {
             <Route path="/math-game-3" element={<MathGame3 />} />
             <Route path="/math-game-4" element={<MathGame4 />} />
             <Route path="/summary" element={<Summary />} />
+            <Route path="/sequence-games" element={<SequenceIntro />} />
+            <Route path="/sequence-game-1" element={<SequenceGame1 />} />
           </Routes>
         </main>
         <Footer />
