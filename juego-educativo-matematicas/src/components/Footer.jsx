@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-light text-center py-3">
       <div className="container">
-        <p>© 2024 GameApp. All rights reserved. | Terms & Conditions</p>
+        <p>© 2025</p>
       </div>
     </footer>
   );

@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import MathIntro from './pages/MathIntro';
+import MathIntro2 from './pages/MathIntro2';
 import MathGame1 from './pages/MathGame1';
 import MathGame2 from './pages/MathGame2';
 import MathGame3 from './pages/MathGame3';
@@ -22,8 +23,9 @@ const App = () => {
         <main className="flex-grow-1">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/math-games" element={<MathIntro />} />
+            <Route path="/math-intro" element={<MathIntro />} />
             <Route path="/math-game-1" element={<MathGame1 />} />
+            <Route path="/math-intro-2" element={<MathIntro2 />} />
             <Route path="/math-game-2" element={<MathGame2 />} />
             <Route path="/math-game-3" element={<MathGame3 />} />
             <Route path="/math-game-4" element={<MathGame4 />} />

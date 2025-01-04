@@ -1,8 +1,9 @@
+/* src/styles/global.css */
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -24,45 +25,70 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  height: 100vh; /* Elimina el uso de flex aquí */
+  display: block;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Contenedor principal para páginas completas */
+.page-container {
+  display: block;
+  flex-direction: column;
+  min-height: 70vh;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+/* Contenido principal centrado */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* Footer */
+footer {
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 1em 0;
+}
+
+.home-button{
+  font-size:1.5rem;
+}
+.home-button:hover {
+  transform: scale(1.05); /* Animación suave al pasar el mouse */
+  color: #fff;
+}
+
+.home-button img {
+  width: 150px; /* Imagen más grande */
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+/* Colores para cada tema */
+.home-button.math {
+  background-color: #0033cc;
+}
+
+.home-button.sequence {
+  background-color: #9900cc;
+}
+
+.home-button.geometry {
+  background-color: #339933;
+}
+
+@media (max-width: 768px) {
+  /* Ajustes para pantallas medianas y pequeñas */
+  .home-button {
+    width: 250px;
+    height: 250px;
   }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+
+  .home-button img {
+    width: 120px;
   }
 }
