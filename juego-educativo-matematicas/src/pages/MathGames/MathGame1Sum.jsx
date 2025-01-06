@@ -64,7 +64,7 @@ const MathGame1 = () => {
 
     setNum1(getRandomNumber());
     setNum2(getRandomNumber());
-    navigate('/math-intro-2');
+    navigate('/intro-resta');
   };
 
   const closeModal = () => setShowModal(false);

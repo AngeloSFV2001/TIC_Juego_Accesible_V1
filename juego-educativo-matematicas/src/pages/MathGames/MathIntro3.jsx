@@ -5,13 +5,12 @@ const MathIntro = () => {
   const navigate = useNavigate();
 
   const handleContinue = () => {
-    navigate('/math-game-1');
+    navigate('/math-game-2');
   };
 
   return (
     <main className="container d-flex flex-column justify-content-center align-items-center min-vh-80 text-center">
-      <h1 className="mb-4" tabIndex="0">Bienvenido a Operaciones Matemáticas</h1>
-      <h2 className="mb-4" tabIndex="0">Operaciones de Suma</h2>
+      <h1 className="mb-4" tabIndex="0">Bienvenido a Operaciones Matemáticas de Multiplicación</h1>
       
       {/* Video responsivo */}
       <div className="mb-4" style={{ width: '100%', maxWidth: '800px' }}>
