@@ -1,6 +1,7 @@
-// src/pages/MathGame3.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -8,124 +9,146 @@ const MathGame3 = () => {
   const navigate = useNavigate();
 
   const [operations, setOperations] = useState([]);
-  const [answers, setAnswers] = useState([]);
-  const [selectedOperation, setSelectedOperation] = useState(null);
-  const [pairs, setPairs] = useState({});
+  const [selectedAnswers, setSelectedAnswers] = useState({});
   const [feedback, setFeedback] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const [locked, setLocked] = useState(true);
 
   useEffect(() => {
-    // Generar operaciones solo una vez al montar el componente
-    const generatedOperations = [
-      { id: 1, text: `${getRandomNumber(100, 500)} + ${getRandomNumber(100, 500)}` },
-      { id: 2, text: `${getRandomNumber(500, 999)} - ${getRandomNumber(100, 500)}` },
-      { id: 3, text: `${getRandomNumber(10, 31)} * ${getRandomNumber(1, 10)}` },
-      { id: 4, text: `${getRandomNumber(20, 99)} / ${getRandomNumber(2, 10)}` },
-    ];
-
-    const generatedAnswers = generatedOperations.map((op, index) => ({
-      id: index + 1,
-      value: eval(op.text), // Evalúa la operación para obtener la respuesta
-    }));
-
+    const generatedOperations = [];
+    while (generatedOperations.length < 4) {
+      const dividend = getRandomNumber(80, 999);
+      const divisor = getRandomNumber(2, 100);
+      if (dividend % divisor === 0) {
+        generatedOperations.push({
+          id: generatedOperations.length + 1,
+          dividend,
+          divisor,
+          quotient: dividend / divisor,
+        });
+      }
+    }
     setOperations(generatedOperations);
-    setAnswers(generatedAnswers);
   }, []);
 
-  const handleSelectOperation = (operationId) => {
-    setSelectedOperation(operationId);
-    setFeedback(null); // Limpiar feedback al seleccionar una operación
-  };
-
-  const handleSelectAnswer = (answerId) => {
-    if (selectedOperation) {
-      setPairs((prevPairs) => {
-        const updatedPairs = { ...prevPairs, [selectedOperation]: answerId };
-
-        // Validar que no se repitan conexiones
-        const uniqueAnswers = new Set(Object.values(updatedPairs));
-        if (uniqueAnswers.size !== Object.values(updatedPairs).length) {
-          setFeedback('Cada respuesta solo puede estar conectada a una operación.');
-          return prevPairs; // No permite la conexión
-        }
-
-        setFeedback(null);
-        setSelectedOperation(null); // Deseleccionar operación después de conectar
-        return updatedPairs;
-      });
-    }
+  const handleAnswerChange = (operationId, value) => {
+    setSelectedAnswers({ ...selectedAnswers, [operationId]: value });
   };
 
   const handleCheck = () => {
-    // Validar conexiones
-    const isCorrect = Object.entries(pairs).every(([operationId, answerId]) => {
-      const operation = operations.find((op) => op.id === parseInt(operationId));
-      const answer = answers.find((ans) => ans.id === answerId);
-      return eval(operation.text) === answer.value;
+    let incorrect = false;
+    let feedbackMessage = '';
+
+    operations.forEach((operation) => {
+      const selectedAnswer = parseInt(selectedAnswers[operation.id], 10);
+      if (selectedAnswer !== operation.quotient) {
+        incorrect = true;
+        feedbackMessage += `\u2022 Operación: ${operation.dividend} ÷ ${operation.divisor}. Respuesta correcta: ${operation.quotient}. \n`;
+        document.getElementById(`operation-${operation.id}`).style.backgroundColor = 'red';
+      } else {
+        document.getElementById(`operation-${operation.id}`).style.backgroundColor = 'green';
+      }
     });
 
-    if (isCorrect) {
-      setFeedback('¡Correcto! Redirigiendo al siguiente juego...');
+    if (incorrect) {
+      setFeedback(feedbackMessage);
+      setShowModal(true);
+    } else {
+      setFeedback('¡Todas las respuestas son correctas! Redirigiendo al siguiente juego...');
       setLocked(false);
-
-      // Redirige al cuarto juego después de 2 segundos
       setTimeout(() => {
         navigate('/math-game-4');
       }, 2000);
-    } else {
-      setFeedback('Algunas respuestas están mal. Intenta de nuevo.');
     }
   };
 
   const handleRetry = () => {
-    setPairs({});
+    setSelectedAnswers({});
     setFeedback(null);
     setLocked(true);
+    setShowModal(false);
+
+    operations.forEach((operation) => {
+      document.getElementById(`operation-${operation.id}`).style.backgroundColor = 'lightblue';
+    });
   };
 
+  const closeModal = () => setShowModal(false);
+
   const handleNext = () => {
-    navigate('/math-game-4'); // Redirige al juego 3
+    navigate('/math-game-4');
   };
 
   return (
-    <div className="container my-5">
-      <h1>Conecta las operaciones con sus respectivas respuestas</h1>
-      <div className="row">
-        <div className="col-md-6">
-          {operations.map((op) => (
-            <button
-              key={op.id}
-              className={`btn btn-secondary mb-3 ${selectedOperation === op.id ? 'btn-info' : ''}`}
-              onClick={() => handleSelectOperation(op.id)}
-            >
-              {op.text}
-            </button>
-          ))}
-        </div>
-        <div className="col-md-6">
-          {answers.map((ans) => (
-            <button
-              key={ans.id}
-              className={`btn btn-primary mb-3 ${Object.values(pairs).includes(ans.id) ? 'btn-success' : ''}`}
-              onClick={() => handleSelectAnswer(ans.id)}
-            >
-              {ans.value}
-            </button>
-          ))}
-        </div>
+    <div className="container my-8 ">
+      <h1 className="text-center mb-5 mt-5" aria-label="Resuelve las divisiones" tabIndex={'0'}>
+        Resuelve las divisiones
+      </h1>
+      <div className="row justify-content-center">
+        {operations.map((operation, index) => (
+          <div key={operation.id} className="row mb-4 justify-content-center align-items-center">
+            <div className="col-md-4 d-flex justify-content-center">
+              <div
+                id={`operation-${operation.id}`}
+                className="text-center p-2 rounded w-100"
+                style={{ backgroundColor: 'lightblue', color: 'black', fontSize: '1.5rem', maxWidth: '300px' }}
+                tabIndex={'0'}
+                aria-label={`Problema ${index + 1}: ${operation.dividend} dividido por ${operation.divisor}`}
+              >
+                {operation.dividend} ÷ {operation.divisor}
+              </div>
+            </div>
+            <div className="col-md-4 d-flex justify-content-center">
+              <select
+                className="form-select w-100"
+                style={{ maxWidth: '300px', fontSize: '1.5rem', textAlign: 'center' }}
+                value={selectedAnswers[operation.id] || ''}
+                onChange={(e) => handleAnswerChange(operation.id, e.target.value)}
+                aria-label={`Combo box de respuesta para el problema ${index + 1}`}
+                tabIndex={'0'}
+              >
+                <option value="">Selecciona una respuesta</option>
+                {[...operations]
+                  .map((op) => op.quotient)
+                  .sort(() => Math.random() - 0.5)
+                  .map((optionValue, optionIndex) => (
+                    <option key={optionIndex} value={optionValue}>
+                      {optionValue}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
+        ))}
       </div>
-      {feedback && <p className="mt-3">{feedback}</p>}
-      <div className="mt-3">
+      <div className="mt-3 text-center">
         <button className="btn btn-warning me-3" onClick={handleRetry}>
           Intentar de nuevo
         </button>
         <button className="btn btn-primary" onClick={handleCheck}>
           Comprobar
         </button>
-        <button className="btn btn-success ms-3" onClick={handleNext} disabled={locked}>
-          Siguiente
-        </button>
       </div>
+
+      <Modal show={showModal} onHide={closeModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Retroalimentación</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p style={{ whiteSpace: 'pre-line' }}>{feedback}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="warning" onClick={handleRetry}>
+            Intentar de nuevo
+          </Button>
+          <Button variant="danger" onClick={closeModal}>
+            Cerrar
+          </Button>
+          <Button variant="success" onClick={handleNext}>
+            Seguir
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
