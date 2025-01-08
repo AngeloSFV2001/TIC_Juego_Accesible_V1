@@ -5,7 +5,7 @@ import '../index.css'; // Asegúrate de tener estilos globales si los necesitas
 
 const Home = () => {
   return (
-    <main className="container d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+    <main className=" my-4 container d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
       {/* Filas de botones */}
       <div className="row w-100 justify-content-center mb-4">
         {/* Primer tema */}
@@ -39,7 +39,7 @@ const Home = () => {
       <div className="row w-100 justify-content-center">
         <div className="col-12 col-sm-6 col-md-4 d-flex justify-content-center mb-3">
           <Link
-            to="/geometry-games"
+            to="/intro-figuras"
             className="btn btn-primary text-center d-flex flex-column justify-content-center align-items-center home-button"
             style={{ width: '250px', height: '250px', borderRadius: '15px', backgroundColor: '#339933' }}
             aria-label="Geometría"

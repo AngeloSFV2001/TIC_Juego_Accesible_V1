@@ -1,4 +1,36 @@
-.bg-default {
+
+  .action-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .input-custom {
+
+    width: 60px;
+    height: 40px;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0 auto;
+    border: 100px solid black;
+  }
+  
+  .label-custom {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    display: block;
+    text-align: center;
+  }
+  .btn-unit-size{
+    width:180px;
+    height:180px;
+  }
+  .btn-position-size{
+    margin: auto;
+  }
+  .bg-default {
     background-image: url('/images/default-background.jpg');
     background-size: cover;
     background-position: center;
@@ -38,37 +70,5 @@
     max-height: 30%;
     display: flex;
     justify-content: center;
-  }
-  
-  .action-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .input-custom {
-
-    width: 60px;
-    height: 40px;
-    font-size: 1rem;
-    text-align: center;
-    margin: 0 auto;
-    border: 100px solid black;
-  }
-  
-  .label-custom {
-    font-size: 1rem;
-    margin-bottom: 5px;
-    display: block;
-    text-align: center;
-  }
-  .btn-unit-size{
-    width:180px;
-    height:180px;
-  }
-  .btn-position-size{
-    margin: auto;
   }
   

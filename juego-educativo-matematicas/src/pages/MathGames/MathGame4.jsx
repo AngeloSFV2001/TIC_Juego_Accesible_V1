@@ -1,6 +1,7 @@
-// src/pages/MathGame4.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -10,16 +11,13 @@ const generateGame = () => {
   const missingIndex = Math.random() < 0.5 ? 1 : 2;
   const result = num1 * num2;
   const correctAnswer = missingIndex === 1 ? num1 : num2;
-
-  // Generar opciones únicas (incluyendo la respuesta correcta)
   const options = generateUniqueOptions(correctAnswer);
 
   return { num1, num2, missingIndex, result, correctAnswer, options };
 };
 
 const generateUniqueOptions = (correctAnswer) => {
-  const options = new Set();
-  options.add(correctAnswer);
+  const options = new Set([correctAnswer]);
   while (options.size < 4) {
     options.add(getRandomNumber(2, 10));
   }
@@ -28,114 +26,111 @@ const generateUniqueOptions = (correctAnswer) => {
 
 const MathGame4 = () => {
   const navigate = useNavigate();
-
   const [gameData, setGameData] = useState(generateGame());
   const [selectedOption, setSelectedOption] = useState(null);
-  const [feedback, setFeedback] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [feedback, setFeedback] = useState('');
   const [locked, setLocked] = useState(true);
 
   const { num1, num2, missingIndex, result, correctAnswer, options } = gameData;
 
-  // Estado para manejar el arrastre
-  const [draggedOption, setDraggedOption] = useState(null);
-
   const handleSelect = (value) => {
     setSelectedOption(value);
-    setFeedback(null);
-  };
-
-  const handleDragStart = (value) => {
-    setDraggedOption(value);
-  };
-
-  const handleDrop = () => {
-    setSelectedOption(draggedOption);
-    setDraggedOption(null);
+    setFeedback('');
   };
 
   const handleCheck = () => {
-    if (selectedOption === correctAnswer) {
-      setFeedback('¡Correcto! Bien hecho.');
-      setLocked(false);
-    } else {
-      setFeedback('Incorrecto. Inténtalo de nuevo.');
-      setLocked(false);
-    }
+    const isCorrect = selectedOption === correctAnswer;
+    const explanation = missingIndex === 1
+      ? `El problema era: ? × ${num2} = ${result}. Luego, ? = ${result} / ${num2}. Finalmente, ? = ${correctAnswer}.`
+      : `El problema era: ${num1} × ? = ${result}. Luego, ? = ${result} / ${num1}. Finalmente, ? = ${correctAnswer}.`;
+    setFeedback(isCorrect ? `¡Correcto! Bien hecho. ${explanation}` : `Incorrecto. Inténtalo de nuevo. ${explanation}`);
+    setLocked(!isCorrect);
+    setShowModal(true);
   };
 
   const handleRetry = () => {
     setGameData(generateGame());
     setSelectedOption(null);
-    setFeedback(null);
+    setFeedback('');
     setLocked(true);
+    setShowModal(false);
   };
 
   const handleNext = () => {
-    navigate('/home'); // Reemplaza con la ruta del siguiente juego o sección
-  };
-
-  // Función para manejar accesibilidad con teclas 1, 2, 3, 4
-  const handleKeyDown = (e) => {
-    const key = e.key;
-    if (['1', '2', '3', '4'].includes(key)) {
-      handleSelect(options[parseInt(key, 10) - 1]);
-    }
+    navigate('/home'); // Cambia por la ruta al siguiente juego o sección
   };
 
   return (
-    <div className="container my-5" onKeyDown={handleKeyDown} tabIndex="0">
-      <h1>Arrastra o selecciona el número que hace realidad la operación</h1>
-      <div className="d-flex justify-content-center align-items-center my-4">
-        {missingIndex === 1 ? (
-          <>
-            <div className="p-3 border" style={{ minWidth: '60px', minHeight: '60px', textAlign: 'center' }}>
-              {selectedOption !== null ? selectedOption : '¿?'}
-            </div>
-            <h2 className="mx-3">× {num2} = {result}</h2>
-          </>
-        ) : (
-          <>
-            <h2>{num1} ×</h2>
-            <div
-              className="p-3 border mx-3"
-              onDrop={handleDrop}
-              onDragOver={(e) => e.preventDefault()}
-              style={{ minWidth: '60px', minHeight: '60px', textAlign: 'center' }}
-            >
-              {selectedOption !== null ? selectedOption : '¿?'}
-            </div>
-            <h2>= {result}</h2>
-          </>
-        )}
+    <div className="container justify-content-center">
+      <h1 className="text-center m-5" tabIndex='0' style={{ fontSize: '2rem' }}>Arrastra o selecciona el número que hace realidad la operación</h1>
+      <div className="d-flex justify-content-center align-items-center m-5" tabIndex='0' style={{ gap: '20px' }}>
+        <h2 style={{ fontSize: '3rem' }}>{missingIndex === 1 ? '¿?' : num1}</h2>
+        <h2 style={{ fontSize: '3rem' }}>×</h2>
+        <h2 style={{ fontSize: '3rem' }}>{missingIndex === 2 ? '¿?' : num2}</h2>
+        <h2 style={{ fontSize: '3rem' }}>=</h2>
+        <h2 style={{ fontSize: '3rem' }}>{result}</h2>
       </div>
 
-      <div className="d-flex justify-content-around my-4">
+      <div className="d-flex justify-content-around flex-wrap my-5">
         {options.map((option, index) => (
-          <div
+          <button
             key={index}
-            className={`btn btn-outline-primary btn-lg ${selectedOption === option ? 'btn-primary text-white' : ''}`}
-            draggable
-            onDragStart={() => handleDragStart(option)}
+            className={`btn btn-lg m-5 ${selectedOption === option ? 'btn-primary' : 'btn-outline-primary'}`}
+            style={{ minWidth: '150px', fontSize: '1.8rem' }}
             onClick={() => handleSelect(option)}
           >
             {option}
-          </div>
+          </button>
         ))}
       </div>
 
-      <div className="mt-4">
-        <button className="btn btn-success me-3" onClick={handleCheck}>
+      <div className="text-center mt-4">
+        <button 
+          className="btn btn-success btn-lg me-3" 
+          onClick={handleCheck} 
+          aria-label={`Botón comprobar, respuesta actual ${num1} x ${num2} = ${result}`} 
+          style={{ fontSize: '1.5rem' }}
+        >
           Comprobar
         </button>
-        <button className="btn btn-warning me-3" onClick={handleRetry} disabled={locked}>
+        <button 
+          className="btn btn-warning btn-lg me-3" 
+          onClick={handleRetry} 
+          disabled={locked} 
+          style={{ fontSize: '1.5rem' }}
+        >
           Intentar de nuevo
         </button>
-        <button className="btn btn-primary" onClick={handleNext} disabled={locked}>
+        <button 
+          className="btn btn-primary btn-lg" 
+          onClick={handleNext} 
+          disabled={locked} 
+          style={{ fontSize: '1.5rem' }}
+        >
           Siguiente
         </button>
       </div>
 
-      {feedback && <p className="mt-3">{feedback}</p>}
+      {/* Modal de retroalimentación */}
+      <Modal show={showModal} onHide={() => setShowModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Resultado</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="text-center">
+            <h4>{feedback}</h4>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className="justify-content-center">
+          <Button variant="warning" onClick={handleRetry}>
+            Intentar de nuevo
+          </Button>
+          <Button variant="primary" onClick={handleNext} disabled={locked}>
+            Siguiente
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

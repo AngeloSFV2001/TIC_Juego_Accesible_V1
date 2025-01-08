@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import '../../index.css';
 
 const getRandomNumber = () => Math.floor(Math.random() * 30) + 1;
 

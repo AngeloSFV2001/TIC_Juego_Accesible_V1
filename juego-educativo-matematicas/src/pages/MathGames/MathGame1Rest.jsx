@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import '../../index.css';
-import '../MathGames/MathStyles/MathGame1Subtraction.css';
+import '../styles/Games.css';
 
 const getRandomNumber = () => Math.floor(Math.random() * 999) + 1;
 

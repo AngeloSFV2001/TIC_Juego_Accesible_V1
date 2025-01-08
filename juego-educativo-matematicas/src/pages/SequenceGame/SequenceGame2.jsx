@@ -1,6 +1,8 @@
 // src/pages/SequenceGame2.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import arrow from "/images/flecha.png"; // Asegúrate de que la imagen está en esta ruta
+import '../../index.css';
 
 const SequenceGame2 = () => {
   const navigate = useNavigate();
@@ -22,7 +24,6 @@ const SequenceGame2 = () => {
       setLocked(false);
     } else {
       setFeedback("Incorrecto. Intenta nuevamente.");
-      setLocked(false);
     }
   };
 
@@ -38,13 +39,35 @@ const SequenceGame2 = () => {
 
   return (
     <div className="container my-5">
-      <h1>¿Qué operación permite que la sucesión sea correcta?</h1>
-      <div className="text-center my-4">
+      <h1 className="text-center">
+        ¿Qué operación permite que la sucesión sea correcta?
+      </h1>
+      <div  
+      className="text-center my-4 position-relative" 
+      style={{ fontSize: "1.5rem" }}
+      
+      >
         {sequence.map((num, index) => (
-          <span key={index} className="mx-2">
-            <strong>{num}</strong>
+          <span key={index} className="position-relative mx-4" style={{ display: "inline-block" }}>
+            <br></br>
+            <br></br>
+            <br></br>
+            <div style={{ fontSize: "2rem", fontWeight: "bold" }}>{num}</div>
             {index < sequence.length - 1 && (
-              <span style={{ fontSize: "2rem", margin: "0 10px" }}>↷</span>
+              
+              <img
+                src={arrow}
+                alt="Arrow"
+                style={{
+                  position: "absolute",
+                  top: "50%", // Ajusta la posición vertical
+                  left: "100%", // Coloca la flecha al lado derecho del número
+                  transform: "translate(-25%, -50%)", // Centra la flecha entre los números
+                  
+                  width: "100px", // Ajusta el tamaño de la flecha
+                  padding: "10",
+                }}
+              />
             )}
           </span>
         ))}

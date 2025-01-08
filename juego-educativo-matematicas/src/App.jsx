@@ -13,10 +13,13 @@ import MathGame2 from './pages/MathGames/MathGame2';
 import MathGame3 from './pages/MathGames/MathGame3';
 import MathGame4 from './pages/MathGames/MathGame4';
 import Summary from './pages/Summary';
-import SequenceIntro from './pages/SequenceIntro';
-import SequenceGame1 from './pages/SequenceGame1';
-import SequenceGame2 from './pages/SequenceGame2';
-import SequenceGame3 from './pages/SequenceGame3';
+import SequenceIntro from './pages/SequenceGame/SequenceIntro';
+import SequenceGame1 from './pages/SequenceGame/SequenceGame1';
+import SequenceGame2 from './pages/SequenceGame/SequenceGame2';
+import SequenceGame3 from './pages/SequenceGame/SequenceGame3';
+import GeometryIntro from './pages/GeometryGames/GeometryIntro';
+import GeometryGame1 from './pages/GeometryGames/GeometryGame1';
+import GeometryGame2 from './pages/GeometryGames/GeometryGame2';
 
 const App = () => {
   return (
@@ -25,8 +28,7 @@ const App = () => {
         <Navbar />
         <main className="flex-grow-1">
           <Routes>
-            <Route path="/" element={<Home />} />
-
+            <Route path={"/inicio"||"/"} element={<Home />} />
             <Route path="/intro-suma" element={<MathIntro />} />
             <Route path="/suma" element={<MathGame1Suma />} />
 
@@ -38,13 +40,15 @@ const App = () => {
 
             <Route path="/intro-división" element={<MathIntro4 />} />
             <Route path="/math-game-3" element={<MathGame3 />} />
-            <Route path="/math-game-4" element={<MathGame4 />} />
             
-            <Route path="/summary" element={<Summary />} />
             <Route path="/sequence-games" element={<SequenceIntro />} />
             <Route path="/sequence-game-1" element={<SequenceGame1 />} />
             <Route path="/sequence-game-2" element={<SequenceGame2 />} />
             <Route path="/sequence-game-3" element={<SequenceGame3 />} />
+
+            <Route path="/intro-figuras" element={<GeometryIntro />} />
+            <Route path="/juego-figuras-1" element={<GeometryGame1 />} />
+            <Route path="/juego-figuras-2" element={<GeometryGame2 />} />
           </Routes>
         </main>
         <Footer />

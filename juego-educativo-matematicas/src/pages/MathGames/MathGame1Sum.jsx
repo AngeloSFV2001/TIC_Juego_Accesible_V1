@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import '../styles/Games.css';
+import '../../index.css';
 
 const getRandomNumber = () => Math.floor(Math.random() * 999) + 1;
 
@@ -15,6 +17,7 @@ const MathGame1 = () => {
   const [options, setOptions] = useState([]);
   const [attempts, setAttempts] = useState(0);
   const [startTime, setStartTime] = useState(Date.now());
+  const [background, setBackground] = useState('default-game');  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,6 +30,7 @@ const MathGame1 = () => {
     setSelectedAnswer(null);
     setFeedback('');
     setLocked(true);
+    setBackground('default-game');
   }, [num1, num2]);
 
   const handleAnswer = (answer) => {
@@ -34,8 +38,10 @@ const MathGame1 = () => {
     setLocked(false);
     if (answer === num1 + num2) {
       setFeedback('¡Correcto!');
+      setBackground('correct');
     } else {
       setFeedback(`recuerda que las sumas se resuelven de derecha a izquierda. Empieza sumando las unidades, luego decenas y por último centenas`);
+      setBackground('incorrect');
     }
     setShowModal(true); // Mostrar el modal
   };
@@ -48,6 +54,7 @@ const MathGame1 = () => {
     setSelectedAnswer(null);
     setLocked(true);
     setStartTime(Date.now());
+    setBackground('default-game');
   };
 
   const handleNext = () => {
@@ -124,92 +131,94 @@ const MathGame1 = () => {
   );
 
   return (
-    <div className="container my-5 text-center">
-      <h1
-        className="mb-4"
-        style={{ fontSize: '2.5rem' }}
-        tabIndex="0"
-        aria-label="Resuelve la siguiente suma"
-      >
-        Resuelve la siguiente suma:
-      </h1>
+    <div className={`container-fluid bg-${background}`}>
+      <div className="container my-5 text-center">
+        <h1
+          className="mb-4"
+          style={{ fontSize: '2.5rem' }}
+          tabIndex="0"
+          aria-label="Resuelve la siguiente suma"
+        >
+          Resuelve la siguiente suma:
+        </h1>
 
-      {/* Operación en un cuadro */}
-      {renderVerticalOperation(num1, num2)}
+        {/* Operación en un cuadro */}
+        {renderVerticalOperation(num1, num2)}
 
-      {/* Opciones de respuesta */}
-      <div className="d-flex justify-content-center my-4">
-        {options.map((option, index) => (
+        {/* Opciones de respuesta */}
+        <div className="d-flex justify-content-center my-4">
+          {options.map((option, index) => (
+            <button
+              key={index}
+              className={`btn ${selectedAnswer === option ? 'btn-success' : 'btn-outline-success'} mx-2`}
+              style={{ width: '120px', height: '80px', fontSize: '1.8rem' }}
+              disabled={!locked && selectedAnswer !== null}
+              onClick={() => handleAnswer(option)}
+              tabIndex="0"
+              aria-label={`Opción de respuesta: ${option}`}
+              aria-pressed={selectedAnswer === option}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+
+        {/* Botones de interacción */}
+        <div className="d-flex justify-content-center mt-4">
           <button
-            key={index}
-            className={`btn ${selectedAnswer === option ? 'btn-success' : 'btn-outline-success'} mx-2`}
-            style={{ width: '120px', height: '80px', fontSize: '1.8rem' }}
-            disabled={!locked && selectedAnswer !== null}
-            onClick={() => handleAnswer(option)}
+            className="btn btn-warning mx-2"
+            style={{ width: '180px', fontSize: '1.5rem' }}
+            onClick={handleRetry}
             tabIndex="0"
-            aria-label={`Opción de respuesta: ${option}`}
-            aria-pressed={selectedAnswer === option}
+            aria-label="Intentar de nuevo"
           >
-            {option}
+            Intentar de nuevo
           </button>
-        ))}
-      </div>
-
-      {/* Botones de interacción */}
-      <div className="d-flex justify-content-center mt-4">
-        <button
-          className="btn btn-warning mx-2"
-          style={{ width: '180px', fontSize: '1.5rem' }}
-          onClick={handleRetry}
-          tabIndex="0"
-          aria-label="Intentar de nuevo"
-        >
-          Intentar de nuevo
-        </button>
-        <button
-          className="btn btn-primary mx-2"
-          style={{ width: '180px', fontSize: '1.5rem' }}
-          onClick={handleNext}
-          disabled={locked || selectedAnswer === null}
-          tabIndex="0"
-          aria-label="Seguir al siguiente juego"
-        >
-          Seguir
-        </button>
-      </div>
-
-      {/* Modal de retroalimentación */}
-      <Modal
-        show={showModal}
-        onHide={closeModal}
-        centered
-        aria-labelledby="resultado-modal"
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="resultado-modal">Resultado</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {renderVerticalOperationResult(num1, num2, num1 + num2)}
-          <p
-            className="mt-3"
-            style={{ fontSize: '1.5rem' }}
+          <button
+            className="btn btn-primary mx-2"
+            style={{ width: '180px', fontSize: '1.5rem' }}
+            onClick={handleNext}
+            disabled={locked || selectedAnswer === null}
             tabIndex="0"
-            aria-live="assertive"
+            aria-label="Seguir al siguiente juego"
           >
-            {feedback}
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="primary"
-            onClick={closeModal}
-            tabIndex="0"
-            aria-label="Cerrar retroalimentación"
-          >
-            Cerrar
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            Seguir
+          </button>
+        </div>
+
+        {/* Modal de retroalimentación */}
+        <Modal
+          show={showModal}
+          onHide={closeModal}
+          centered
+          aria-labelledby="resultado-modal"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="resultado-modal">Resultado</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {renderVerticalOperationResult(num1, num2, num1 + num2)}
+            <p
+              className="mt-3"
+              style={{ fontSize: '1.5rem' }}
+              tabIndex="0"
+              aria-live="assertive"
+            >
+              {feedback}
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="primary"
+              onClick={closeModal}
+              tabIndex="0"
+              aria-label="Cerrar retroalimentación"
+            >
+              Cerrar
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
     </div>
   );
 };

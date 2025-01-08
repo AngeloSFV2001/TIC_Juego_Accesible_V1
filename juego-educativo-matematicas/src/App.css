@@ -40,3 +40,56 @@
 .read-the-docs {
   color: #888;
 }
+.bg-default-2 {
+  background-image: url('/images/default-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-width: 100%;
+  min-height: 80%;
+  max-height: 80%;
+  display: flex;
+  justify-content: center;
+}
+.bg-default {
+  background-image: url('/images/default-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-width: 100%;
+  max-height: 80%;
+  display: flex;
+  justify-content: center;
+}
+
+.bg-default-game {
+  background-image: url('/images/default-game-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-width: 70%;
+  max-height: 30%;
+  display: flex;
+  justify-content: center;
+}
+.bg-correct {
+  background-image: url('/images/correct-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-width: 70%;
+  max-height: 30%;
+  display: flex;
+  justify-content: center;
+}
+
+.bg-incorrect {
+  background-image: url('/images/incorrect-background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-width: 70%;
+  max-height: 30%;
+  display: flex;
+  justify-content: center;
+}
