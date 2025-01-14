@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import '../styles/Games.css';
 import '../../index.css';
+import '../styles/Games.css';
 
 const getRandomNumber = () => Math.floor(Math.random() * 999) + 1;
 
-const MathGame1 = () => {
+const MathGame1Addition = () => {
   const [num1, setNum1] = useState(getRandomNumber());
   const [num2, setNum2] = useState(getRandomNumber());
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -17,7 +17,10 @@ const MathGame1 = () => {
   const [options, setOptions] = useState([]);
   const [attempts, setAttempts] = useState(0);
   const [startTime, setStartTime] = useState(Date.now());
-  const [background, setBackground] = useState('default-game');  
+  const [background, setBackground] = useState('default-game');
+  const [correctCount, setCorrectCount] = useState(0);
+  const [exerciseCount, setExerciseCount] = useState(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,17 +40,18 @@ const MathGame1 = () => {
     setSelectedAnswer(answer);
     setLocked(false);
     if (answer === num1 + num2) {
-      setFeedback('¡Correcto!');
-      setBackground('correct');
+      setFeedback('¡Correcto! Recuerda que las sumas se resuelven de derecha a izquierda. Empieza sumando las unidades, luego decenas y centenas.');
+      setCorrectCount((prev) => prev + 1);
     } else {
-      setFeedback(`recuerda que las sumas se resuelven de derecha a izquierda. Empieza sumando las unidades, luego decenas y por último centenas`);
-      setBackground('incorrect');
+      setFeedback(
+        `Incorrecto. Recuerda que las sumas se resuelven de derecha a izquierda. Empieza sumando las unidades, luego decenas y centenas.`
+      );
     }
-    setShowModal(true); // Mostrar el modal
+    setExerciseCount((prev) => prev + 1);
+    setShowModal(true);
   };
 
   const handleRetry = () => {
-    setAttempts((prev) => prev + 1);
     setNum1(getRandomNumber());
     setNum2(getRandomNumber());
     setFeedback('');
@@ -55,35 +59,22 @@ const MathGame1 = () => {
     setLocked(true);
     setStartTime(Date.now());
     setBackground('default-game');
+    setShowModal(false);
   };
 
-  const handleNext = () => {
-    const endTime = Date.now();
-    const elapsedTime = Math.round((endTime - startTime) / 1000);
-
-    localStorage.setItem('math-game-1', JSON.stringify({
-      operation: `${num1} + ${num2}`,
-      correctAnswer: num1 + num2,
-      userAnswer: selectedAnswer,
-      timeTaken: elapsedTime,
-      attempts,
-    }));
-
-    setNum1(getRandomNumber());
-    setNum2(getRandomNumber());
+  const handleNextGame = () => {
     navigate('/intro-resta');
   };
 
   const closeModal = () => setShowModal(false);
 
-  const renderVerticalOperation = (num1, num2, result = '???') => (
-      <div
-        className="border border-2 rounded p-3 mx-auto text-center"
-        style={{ maxWidth: '200px', fontSize: '2.5rem', lineHeight: '3.5rem' }}
-        aria-label={`${num1} más ${num2}. ¿Cuál es el resultado?`}
-        tabIndex="0"
-      >
-    
+  const renderVerticalOperation = (num1, num2, result = '???', texto) => (
+    <div
+      className="border border-2 rounded p-3 mx-auto text-center"
+      style={{ maxWidth: '200px', fontSize: '2.5rem', lineHeight: '3.5rem' }}
+      aria-label={`${num1} más ${num2} ${texto}`}
+      tabIndex="0"
+    >
       <table className="text-end w-100">
         <tbody>
           <tr>
@@ -91,7 +82,7 @@ const MathGame1 = () => {
           </tr>
           <tr>
             <td>
-              <span aria-hidden="true" >+</span> {num2.toString().padStart(3, ' ')}
+              <span aria-hidden="true">+</span> {num2.toString().padStart(3, ' ')}
             </td>
           </tr>
           <tr>
@@ -100,34 +91,6 @@ const MathGame1 = () => {
         </tbody>
       </table>
     </div>
-    
-  );
-  
-  const renderVerticalOperationResult = (num1, num2, result) => (
-    <div
-      className="border border-2 rounded p-3 mx-auto text-center"
-      style={{ maxWidth: '200px', fontSize: '2.5rem', lineHeight: '3.5rem' }}
-      aria-label={`${num1} más ${num2}. es igual a ${result}`}
-      tabIndex="0"
-    >
-  
-    <table className="text-end w-100">
-      <tbody>
-        <tr>
-          <td>{num1.toString().padStart(3, ' ')}</td>
-        </tr>
-        <tr>
-          <td>
-            <span aria-hidden="true" >+</span> {num2.toString().padStart(3, ' ')}
-          </td>
-        </tr>
-        <tr>
-          <td style={{ borderTop: '3px solid black' }}>{result}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
   );
 
   return (
@@ -137,13 +100,13 @@ const MathGame1 = () => {
           className="mb-4"
           style={{ fontSize: '2.5rem' }}
           tabIndex="0"
-          aria-label="Resuelve la siguiente suma"
+          aria-label={`${correctCount} de 3 Ejercicios correctas, Resuelve la siguiente suma`}
         >
-          Resuelve la siguiente suma:
+          Resuelve la siguiente suma (Correctas: {correctCount} / 3):
         </h1>
 
         {/* Operación en un cuadro */}
-        {renderVerticalOperation(num1, num2)}
+        {renderVerticalOperation(num1, num2, '???', '¿Cuál es el resultado?')}
 
         {/* Opciones de respuesta */}
         <div className="d-flex justify-content-center my-4">
@@ -170,17 +133,17 @@ const MathGame1 = () => {
             style={{ width: '180px', fontSize: '1.5rem' }}
             onClick={handleRetry}
             tabIndex="0"
-            aria-label="Intentar de nuevo"
+            aria-label="Nuevo ejercicio"
           >
-            Intentar de nuevo
+            Nuevo ejercicio
           </button>
           <button
-            className="btn btn-primary mx-2"
+            className="btn btn-success mx-2"
             style={{ width: '180px', fontSize: '1.5rem' }}
-            onClick={handleNext}
-            disabled={locked || selectedAnswer === null}
+            onClick={handleNextGame}
+            disabled={correctCount < 3}
             tabIndex="0"
-            aria-label="Seguir al siguiente juego"
+            aria-label="Pasar al siguiente juego"
           >
             Seguir
           </button>
@@ -197,24 +160,28 @@ const MathGame1 = () => {
             <Modal.Title id="resultado-modal">Resultado</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {renderVerticalOperationResult(num1, num2, num1 + num2)}
-            <p
-              className="mt-3"
-              style={{ fontSize: '1.5rem' }}
-              tabIndex="0"
-              aria-live="assertive"
-            >
-              {feedback}
-            </p>
+            <p tabIndex={'0'}>{feedback}</p>
+            <div className="mt-3">
+              {renderVerticalOperation(num1, num2, num1 + num2, `es igual a ${num1 + num2}`)}
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button
-              variant="primary"
-              onClick={closeModal}
+              className="btn btn-warning"
+              onClick={handleRetry}
               tabIndex="0"
-              aria-label="Cerrar retroalimentación"
+              aria-label="Nuevo ejercicio"
             >
-              Cerrar
+              Nuevo ejercicio
+            </Button>
+            <Button
+              className="btn btn-success"
+              onClick={handleNextGame}
+              disabled={correctCount < 3}
+              tabIndex="0"
+              aria-label="Pasar al siguiente juego"
+            >
+              Siguiente juego
             </Button>
           </Modal.Footer>
         </Modal>
@@ -223,4 +190,4 @@ const MathGame1 = () => {
   );
 };
 
-export default MathGame1;
+export default MathGame1Addition;

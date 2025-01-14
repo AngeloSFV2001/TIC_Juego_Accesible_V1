@@ -46,7 +46,7 @@
     background-position: center;
     background-repeat: no-repeat;
     max-width: 70%;
-    max-height: 30%;
+    max-height: 600px;
     display: flex;
     justify-content: center;
   }

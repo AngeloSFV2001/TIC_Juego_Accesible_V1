@@ -42,6 +42,7 @@ const MathGame3 = () => {
 
     operations.forEach((operation) => {
       const selectedAnswer = parseInt(selectedAnswers[operation.id], 10);
+      feedbackMessage += 'recuerda que la división se realiza '
       if (selectedAnswer !== operation.quotient) {
         incorrect = true;
         feedbackMessage += `• Operación: ${operation.dividend} ÷ ${operation.divisor}. Respuesta correcta: ${operation.quotient}.\n`;
@@ -49,6 +50,7 @@ const MathGame3 = () => {
       } else {
         document.getElementById(`operation-${operation.id}`).style.backgroundColor = 'green';
       }
+      
     });
 
     if (incorrect) {
@@ -137,7 +139,16 @@ const MathGame3 = () => {
             <Modal.Title>Retroalimentación</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            
             <p style={{ whiteSpace: 'pre-line' }}>{feedback}</p>
+            <div className="text-center">
+              <img
+                src={'/images/retroalimentacionDivision.png'}
+                alt={`n`}
+                style={{ width: "60%", maxWidth: "500px", height: "auto" }}
+                tabIndex={'0'}
+              />
+            </div>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="warning" onClick={handleRetry}>

@@ -17,12 +17,16 @@ const MathGame1Subtraction = () => {
   const [options, setOptions] = useState([]);
   const [attempts, setAttempts] = useState(0);
   const [startTime, setStartTime] = useState(Date.now());
-  const [background, setBackground] = useState('default-game');  
-  const navigate = useNavigate();
+  const [background, setBackground] = useState('default-game');
+  const [correctCount, setCorrectCount] = useState(0);
+  const [exerciseCount, setExerciseCount] = useState(0);
 
+  const navigate = useNavigate();
+  
   useEffect(() => {
+    
     if (num1 < num2) {
-      setNum1(num2 + Math.floor(Math.random() * 100)); // Aseguramos que num1 siempre sea mayor o igual a num2
+      setNum1(num2 + Math.floor(Math.random() * 100));
     }
     const correctAnswer = num1 - num2;
     setOptions([
@@ -40,19 +44,20 @@ const MathGame1Subtraction = () => {
     setSelectedAnswer(answer);
     setLocked(false);
     if (answer === num1 - num2) {
-      setFeedback('¡Correcto!');
-      setBackground('correct');
+      setFeedback('¡Correcto! Recuerda que las restas se resuelven de derecha a izquierda. Restando las unidades, decenas y centenas.');
+      
+      setCorrectCount((prev) => prev + 1);
     } else {
       setFeedback(
-        `Recuerda que las restas se resuelven de derecha a izquierda. Restando las unidades, decenas y centenas.`
+        `Incorrecto. Recuerda que las restas se resuelven de derecha a izquierda. Restando las unidades, decenas y centenas.`
       );
-      setBackground('incorrect');
+      
     }
-    setShowModal(true); // Mostrar el modal
+    setExerciseCount((prev) => prev + 1);
+    setShowModal(true);
   };
 
   const handleRetry = () => {
-    setAttempts((prev) => prev + 1);
     setNum1(getRandomNumber());
     setNum2(getRandomNumber());
     setFeedback('');
@@ -60,57 +65,24 @@ const MathGame1Subtraction = () => {
     setLocked(true);
     setStartTime(Date.now());
     setBackground('default-game');
+    setShowModal(false);
   };
 
-  const handleNext = () => {
+  const handleNextGame = () => {
     const endTime = Date.now();
     const elapsedTime = Math.round((endTime - startTime) / 1000);
 
-    localStorage.setItem('math-game-1-subtraction', JSON.stringify({
-      operation: `${num1} - ${num2}`,
-      correctAnswer: num1 - num2,
-      userAnswer: selectedAnswer,
-      timeTaken: elapsedTime,
-      attempts,
-    }));
-
-    setNum1(getRandomNumber());
-    setNum2(getRandomNumber());
     navigate('/intro-multiplicación');
   };
 
   const closeModal = () => setShowModal(false);
 
-  const renderVerticalOperation = (num1, num2, result = '???') => (
+  const renderVerticalOperation = (num1, num2, result = '???',texto) => (
+    
     <div
       className="border border-2 rounded p-3 mx-auto text-center"
       style={{ maxWidth: '200px', fontSize: '2.5rem', lineHeight: '3.5rem' }}
-      aria-label={`${num1} menos ${num2}. ¿Cuál es el resultado?`}
-      tabIndex="0"
-    >
-      <table className="text-end w-100">
-        <tbody>
-          <tr>
-            <td>{num1.toString().padStart(3, ' ')}</td>
-          </tr>
-          <tr>
-            <td>
-              <span aria-hidden="true">-</span> {num2.toString().padStart(3, ' ')}
-            </td>
-          </tr>
-          <tr>
-            <td style={{ borderTop: '3px solid black' }}>{result}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-
-  const renderVerticalOperationResult = (num1, num2, result) => (
-    <div
-      className="border border-2 rounded p-3 mx-auto text-center"
-      style={{ maxWidth: '200px', fontSize: '2.5rem', lineHeight: '3.5rem' }}
-      aria-label={`${num1} menos ${num2}. Es igual a ${result}`}
+      aria-label={`${num1} menos ${num2} ${texto}`}
       tabIndex="0"
     >
       <table className="text-end w-100">
@@ -138,13 +110,13 @@ const MathGame1Subtraction = () => {
           className="mb-4"
           style={{ fontSize: '2.5rem' }}
           tabIndex="0"
-          aria-label="Resuelve la siguiente resta"
+          aria-label={`${correctCount} de 3 Ejercicios correctas, Resuelve la siguiente resta`}
         >
-          Resuelve la siguiente resta:
+          Resuelve la siguiente resta (Correctas: {correctCount} / 3):
         </h1>
 
         {/* Operación en un cuadro */}
-        {renderVerticalOperation(num1, num2)}
+        {renderVerticalOperation(num1, num2,'???','¿Cual es el resultado?')}
 
         {/* Opciones de respuesta */}
         <div className="d-flex justify-content-center my-4">
@@ -171,17 +143,17 @@ const MathGame1Subtraction = () => {
             style={{ width: '180px', fontSize: '1.5rem' }}
             onClick={handleRetry}
             tabIndex="0"
-            aria-label="Intentar de nuevo"
+            aria-label="Nuevo ejercicio"
           >
-            Intentar de nuevo
+            Nuevo ejercicio
           </button>
           <button
-            className="btn btn-primary mx-2"
+            className="btn btn-success mx-2"
             style={{ width: '180px', fontSize: '1.5rem' }}
-            onClick={handleNext}
-            disabled={locked || selectedAnswer === null}
+            onClick={handleNextGame}
+            disabled={correctCount < 3}
             tabIndex="0"
-            aria-label="Seguir al siguiente juego"
+            aria-label="Pasar al siguiente juego"
           >
             Seguir
           </button>
@@ -198,50 +170,34 @@ const MathGame1Subtraction = () => {
             <Modal.Title id="resultado-modal">Resultado</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {renderVerticalOperationResult(num1, num2, num1 - num2)}
-            <p
-              className="mt-3"
-              style={{ fontSize: '1.5rem' }}
-              tabIndex="0"
-              aria-live="assertive"
-            >
-              {feedback}
-            </p>
+            <p tabIndex={'0'}>{feedback}</p>
+            <div className="mt-3">
+              {renderVerticalOperation(num1, num2, num1 - num2,`es igual a ${num1 - num2}`)}
+            </div>
           </Modal.Body>
-          <Modal.Footer className="justify-content-center mt-3">
+          <Modal.Footer>
             <Button
-              className="btn btn-warning mx-2"
-              style={{ width: '130px', fontSize: '1.3rem' }}
+              className="btn btn-warning"
               onClick={handleRetry}
               tabIndex="0"
-              aria-label="Intentar de nuevo"
+              aria-label="Nuevo ejercicio"
             >
-              Intentar de nuevo
+              Nuevo ejercicio
             </Button>
             <Button
-              className="btn btn-primary mx-2"
-              style={{ width: '130px', fontSize: '1.3rem' }}
-              onClick={handleNext}
-              disabled={locked || selectedAnswer === null}
+              className="btn btn-success"
+              onClick={handleNextGame}
+              disabled={correctCount < 3}
               tabIndex="0"
-              aria-label="Seguir al siguiente juego"
+              aria-label="Pasar al siguiente juego"
             >
-              Seguir
-            </Button>
-            <Button
-              className="btn btn-danger mx-2"
-              style={{ width: '130px', fontSize: '1.3rem' }}
-              variant="primary"
-              onClick={closeModal}
-              tabIndex="0"
-              aria-label="Cerrar retroalimentación"
-            >
-              Cerrar
+              Siguiente juego
             </Button>
           </Modal.Footer>
         </Modal>
       </div>
-    </div>  );
+    </div>
+  );
 };
 
 export default MathGame1Subtraction;

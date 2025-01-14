@@ -7,28 +7,40 @@ import '../../index.css';
 const SequenceGame1 = () => {
   const navigate = useNavigate();
 
-  // Sucesión completa y correcta
-  const sequence = [1, 1, 2, 3, 5, 8];
-  const correctAnswer = 13;
+  const exercises = [
+    {
+      sequence: [1, 1, 2, 3, 5, 8],
+      correctAnswer: 13,
+      options: [8, 6, 13]
+    },
+    {
+      sequence: [1, 2, 4, 8, 16],
+      correctAnswer: 32,
+      options: [32, 20, 40]
+    },
+    {
+      sequence: [12, 10, 8, 6, 4],
+      correctAnswer: 2,
+      options: [0, 2, 3]
+    }
+  ];
 
-  // Opciones de respuesta
-  const options = [8, 6, 13];
-
+  const [currentExercise, setCurrentExercise] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [locked, setLocked] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [allowNext, setAllowNext] = useState(false);
-  const [background, setBackground] = useState('default-game');  
+  const [background, setBackground] = useState('default-game');
 
   const handleCheck = () => {
-    if (selectedOption === correctAnswer) {
+    if (selectedOption === exercises[currentExercise].correctAnswer) {
       setFeedback('¡Correcto! Bien hecho.');
       setLocked(false);
       setAllowNext(true);
     } else {
-      setFeedback('Incorrecto. Inténtalo de nuevo.');
-      setLocked(false);
+      setFeedback('Incorrecto. Recuerda para resolver una sucesión, debes encontrar la relación entre los números presentes, estos pueden ser de suma, resta, multiplicación o división. Inténtalo de nuevo.');
+      setLocked(true);
     }
     setShowModal(true);
   };
@@ -45,11 +57,19 @@ const SequenceGame1 = () => {
     setBackground('default-game');
   };
 
-  const handleNext = () => {
-    navigate('/sequence-game-2'); // Redirige al siguiente juego de sucesiones
+  const handleNextExercise = () => {
+    if (currentExercise < exercises.length - 1) {
+      setCurrentExercise(currentExercise + 1);
+      setSelectedOption(null);
+      setFeedback('');
+      setLocked(true);
+      setAllowNext(false);
+      closeModal();
+    } else {
+      navigate('/sequence-game-2'); // Redirige al siguiente juego
+    }
   };
 
-  // Función para generar imágenes proporcionales al número con condiciones de diseño
   const renderImages = (num) => {
     const images = [];
     for (let i = 0; i < num; i++) {
@@ -58,20 +78,20 @@ const SequenceGame1 = () => {
           key={i}
           src="/images/paleta.png"
           alt={`Representación ${num}`}
-          className="m-1"
+          className="m-1 "
           style={{ width: '20px', height: '40px' }}
         />
       );
     }
-    let columns = 2;
+    let columns = Math.round(Math.sqrt(num));
     let margen = 0;
-    if (num > 15) columns = 4 , margen = 50;
-    else if (num > 5) columns = 3 , margen = 45;
+    if (num > 15) margen = 50;
+    else if (num > 5) margen = 45;
     else if (num > 1) margen =40;
     else margen= 20;
     return (
-      <div className="align-items-center">
-        <div className="d-grid flex-row align-items-center"
+      <div className="align-items-center ">
+        <div className="d-grid flex-row align-items-center bg-info bg-gradient rounded"
         style={{
           gridTemplateColumns: `repeat(${columns}, auto)`,
           gap: '10px',
@@ -91,46 +111,33 @@ const SequenceGame1 = () => {
       </div>
     );
   };
-  
-  const renderSequenceDescription = () => {
-    let description = '';
-    for (let i = 1; i < sequence.length; i++) {
-      const operation = sequence[i] - sequence[i - 1];
-      description += `${sequence[i - 1]}-(${sequence[i - 1]}+${operation})->${sequence[i]} `;
-    }
-    description += `${sequence[sequence.length - 1]}-(${sequence[sequence.length - 1]}+${correctAnswer - sequence[sequence.length - 1]})->${correctAnswer}`;
-    return description;
-  };
+
+  const currentSeq = exercises[currentExercise];
 
   return (
-    <div className={`container-fluid bg-${background}`}>
-      <div className="container my-5 text-center">
-        <h1 className="my-5" tabIndex="0">Seleccione la opción que sigue en la sucesión</h1>
-        <div className="d-flex justify-content-center align-items-center my-4"
+    <div className={`container-fluid bg-${background} `}>
+      <div className="container mt-3 text-center vh-100">
+        <h2 className="mt-2" tabIndex="0">Seleccione la opción que sigue en la sucesión</h2>
+        <div className="mt-2 ms-5 d-flex justify-content-center align-items-center "
           tabIndex="0"
-          aria-label={`Primer número de la sucesion es ${sequence[0]},
-          el segundo número de la sucesion es ${sequence[1]},
-          el tercero número de la sucesion es ${sequence[2]},
-          el cuarto número de la sucesion es ${sequence[3]},
-          el quinto número de la sucesion es ${sequence[4]},
-          el sexto número de la sucesion es ${sequence[5]}
-          ¿Cúal numero sigue en la sucesión?`}
+          aria-label={`Secuencia actual: ${currentSeq.sequence.join(', ')}. ¿Cuál número sigue?`}
         >
-          {sequence.map((num, index) => (
-            <div key={index} className="d-flex align-items-center ">
+          {currentSeq.sequence.map((num, index) => (
+            <div key={index} className="d-flex align-items-center mt-3">
               {renderImages(num)}
-              {index < sequence.length - 1 && <h2 className="mx-3">→</h2>}
+              {index < currentSeq.sequence.length - 1 && <h2 className="mx-3 ">→</h2>}
             </div>
           ))}
         </div>
 
-        <div className="d-flex justify-content-center my-4">
-          {options.map((option, index) => (
+        <div className="d-flex justify-content-center mt-1 mb-4">
+          {currentSeq.options.map((option, index) => (
             <button
               key={index}
               className={`btn btn-lg ${
                 selectedOption === option ? 'btn-success' : 'btn-outline-success'
               } mx-2`}
+              aria-label={`número ${option}`}
               style={{ width: '120px', height: '60px', fontSize: '1.5rem' }}
               onClick={() => setSelectedOption(option)}
             >
@@ -139,8 +146,8 @@ const SequenceGame1 = () => {
           ))}
         </div>
 
-        <div className="mt-4 text-center">
-          <button className="btn btn-primary me-3" onClick={handleCheck} disabled={selectedOption === null}>
+        <div className="mt-2 text-center">
+          <button className="btn btn-primary me-3 mb-5" onClick={handleCheck} disabled={selectedOption === null}>
             Comprobar
           </button>
         </div>
@@ -156,15 +163,7 @@ const SequenceGame1 = () => {
             <Modal.Title id="resultado-modal">Resultado</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p
-              className="mt-3"
-              style={{ fontSize: '1.5rem' }}
-              tabIndex="0"
-              aria-live="assertive"
-            >
-              {renderSequenceDescription()}
-            </p>
-            <p
+          <p
               className="mt-3"
               style={{ fontSize: '1.5rem' }}
               tabIndex="0"
@@ -172,6 +171,22 @@ const SequenceGame1 = () => {
             >
               {feedback}
             </p>
+           <p
+              className="mt-3 text-center"
+              style={{ fontSize: '1.5rem' }}
+              tabIndex="0"
+              aria-label='Sucesion similar: 1, 2, 4, 7, 11. Analizamos y 1 + 1 es 2, el 2 anterior + 2 es 4, 4 anterior + 3 es 7, 7 anterior + 4 es 11. 
+              Podemos observar que se suma al numero anterior otro numero que va incrementando en 1'
+            >
+              Ejemplo similar
+              1 - 2 - 4 - 7 - 11 <br />
+              1<br />
+              1 + <b>1</b> = 2<br />
+              2 + <b>2</b> = 4<br />
+              4 + <b>3</b> = 7<br />
+              7 + <b>4</b> = 11
+            </p>
+            
           </Modal.Body>
           <Modal.Footer>
             <Button
@@ -184,12 +199,12 @@ const SequenceGame1 = () => {
             </Button>
             <Button
               variant="success"
-              onClick={handleNext}
+              onClick={handleNextExercise}
               tabIndex="0"
-              aria-label="Seguir al siguiente juego"
+              aria-label="Siguiente ejercicio"
               disabled={!allowNext}
             >
-              Seguir
+              {currentExercise < exercises.length - 1 ? 'Siguiente ejercicio' : 'Seguir'}
             </Button>
           </Modal.Footer>
         </Modal>

@@ -8,25 +8,25 @@ const figures = [
   {
     id: 1,
     name: 'Cuadrado',
-    image: '/path/to/cuadrado.png', // Reemplazar con la ruta de la imagen del cuadrado
+    image: '/images/Cuadrado.png', 
     formula: 'lado x lado',
   },
   {
     id: 2,
     name: 'Rectángulo',
-    image: '/path/to/rectangulo.png', // Reemplazar con la ruta de la imagen del rectángulo
+    image: '/images/rectangulo.jpg', // Reemplazar con la ruta de la imagen del rectángulo
     formula: 'base x altura',
   },
   {
     id: 3,
     name: 'Triángulo',
-    image: '/path/to/triangulo.png', // Reemplazar con la ruta de la imagen del triángulo
+    image: '/images/triangulo.png', // Reemplazar con la ruta de la imagen del triángulo
     formula: 'base x altura / 2',
   },
   {
     id: 4,
     name: 'Rombo',
-    image: '/path/to/rombo.png', // Reemplazar con la ruta de la imagen del rombo
+    image: '/images/rombo.png', // Reemplazar con la ruta de la imagen del rombo
     formula: 'D x d / 2',
     
   },
@@ -65,12 +65,6 @@ const GeometryGame = () => {
     if (incorrect) {
       setFeedback(feedbackMessage);
       setShowModal(true);
-    } else {
-      setFeedback('¡Todas las respuestas son correctas! Redirigiendo al siguiente juego...');
-      setLocked(false);
-      setTimeout(() => {
-        navigate('/next-game');
-      }, 2000);
     }
   };
 
@@ -81,7 +75,10 @@ const GeometryGame = () => {
     setShowModal(false);
   };
 
-  const closeModal = () => setShowModal(false);
+  const handleNext = () => {
+
+    navigate('/juego-figuras-3');
+  };
 
   return (
     <div className="container-fluid bg-default">
@@ -89,10 +86,12 @@ const GeometryGame = () => {
         <h1 className="text-center mb-5 mt-5" aria-label="Conecta las fórmulas del área con las figuras correspondientes" tabIndex="0">
           Conecta las fórmulas del área con las figuras correspondientes
         </h1>
-        <div className="row justify-content-center">
+        <div className="row justify-content-center"
+        >
           {figures.map((figure) => (
             <div key={figure.id} className="row mb-4 justify-content-center align-items-center">
-              <div className="col-md-4 d-flex justify-content-center">
+              <div className="col-md-4 d-flex justify-content-center "
+              tabIndex={'0'}>
                 <img
                   src={figure.image}
                   alt={`Figura de ${figure.name}`}
@@ -139,6 +138,14 @@ const GeometryGame = () => {
           <Modal.Footer>
             <Button variant="warning" onClick={handleRetry}>
               Intentar de nuevo
+            </Button>
+            <Button
+              variant="success"
+              onClick={handleNext}
+              tabIndex="0"
+              aria-label="Ir al siguiente juego"
+            >
+              Seguir
             </Button>
             <Button variant="danger" onClick={closeModal}>
               Cerrar
