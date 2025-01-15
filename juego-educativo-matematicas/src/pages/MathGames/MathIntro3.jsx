@@ -17,7 +17,7 @@ const MathIntro = () => {
         <div className="ratio ratio-16x9">
           <iframe
             className="embed-responsive-item"
-            src="https://www.youtube.com/embed/HWdwzmD3XXQ?playlist=HWdwzmD3XXQ&loop=1&modestbranding=1&rel=1&showinfo=1"
+            src="https://www.youtube.com/watch?v=HbxkZ3xjIQk?playlist=HWdwzmD3XXQ&loop=1&modestbranding=1&rel=1&showinfo=1"
             title="Video de introducción a operaciones matemáticas"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture;playlist; controls"

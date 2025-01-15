@@ -13,7 +13,7 @@ const MathGame3 = () => {
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [feedback, setFeedback] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [locked, setLocked] = useState(true);
+  const [nextEnabled, setNextEnabled] = useState(false);
 
   useEffect(() => {
     const generatedOperations = [];
@@ -42,33 +42,30 @@ const MathGame3 = () => {
 
     operations.forEach((operation) => {
       const selectedAnswer = parseInt(selectedAnswers[operation.id], 10);
-      feedbackMessage += 'recuerda que la división se realiza '
       if (selectedAnswer !== operation.quotient) {
         incorrect = true;
-        feedbackMessage += `• Operación: ${operation.dividend} ÷ ${operation.divisor}. Respuesta correcta: ${operation.quotient}.\n`;
+        feedbackMessage += `\u2022 ${operation.dividend} ÷ ${operation.divisor} = ${selectedAnswer} es incorrecta.\n`;
         document.getElementById(`operation-${operation.id}`).style.backgroundColor = 'red';
       } else {
+        feedbackMessage += `\u2022 ${operation.dividend} ÷ ${operation.divisor} = ${selectedAnswer} es correcta.\n`;
         document.getElementById(`operation-${operation.id}`).style.backgroundColor = 'green';
       }
-      
     });
 
     if (incorrect) {
-      setFeedback(feedbackMessage);
-      setShowModal(true);
+      setFeedback(`Algunas respuestas son incorrectas:\n\n${feedbackMessage}`);
+      setNextEnabled(false);
     } else {
-      setFeedback('¡Todas las respuestas son correctas! Redirigiendo al siguiente juego...');
-      setLocked(false);
-      setTimeout(() => {
-        navigate('/math-game-4');
-      }, 2000);
+      setFeedback('¡Todas las respuestas son correctas! Felicitaciones acabaste todas los niveles');
+      setNextEnabled(true);
     }
+    setShowModal(true);
   };
 
   const handleRetry = () => {
     setSelectedAnswers({});
     setFeedback(null);
-    setLocked(true);
+    setNextEnabled(false);
     setShowModal(false);
 
     operations.forEach((operation) => {
@@ -79,7 +76,7 @@ const MathGame3 = () => {
   const closeModal = () => setShowModal(false);
 
   const handleNext = () => {
-    navigate('/inicio');
+    if (nextEnabled) navigate('/math-game-4');
   };
 
   return (
@@ -139,7 +136,6 @@ const MathGame3 = () => {
             <Modal.Title>Retroalimentación</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            
             <p style={{ whiteSpace: 'pre-line' }}>{feedback}</p>
             <div className="text-center">
               <img
@@ -147,6 +143,7 @@ const MathGame3 = () => {
                 alt={`n`}
                 style={{ width: "60%", maxWidth: "500px", height: "auto" }}
                 tabIndex={'0'}
+                aria-label=''
               />
             </div>
           </Modal.Body>
@@ -154,10 +151,7 @@ const MathGame3 = () => {
             <Button variant="warning" onClick={handleRetry}>
               Intentar de nuevo
             </Button>
-            <Button variant="danger" onClick={closeModal}>
-              Cerrar
-            </Button>
-            <Button variant="success" onClick={handleNext}>
+            <Button variant="success" onClick={handleNext} disabled={!nextEnabled}>
               Seguir
             </Button>
           </Modal.Footer>
