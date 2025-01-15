@@ -15,16 +15,17 @@ const MathIntro = () => {
       {/* Video responsivo */}
       <div className="mb-4" style={{ width: '100%', maxWidth: '800px' }}>
         <div className="ratio ratio-16x9">
-          <iframe
-            className="embed-responsive-item"
-            src="https://www.youtube.com/watch?v=HbxkZ3xjIQk?playlist=HWdwzmD3XXQ&loop=1&modestbranding=1&rel=1&showinfo=1"
-            title="Video de introducción a operaciones matemáticas"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture;playlist; controls"
-            allowFullScreen
-            aria-label="Video introductorio de operaciones matemáticas"
-            tabIndex="0"
-          ></iframe>
+        <iframe 
+          width="560" 
+          height="315" 
+          src="https://www.youtube.com/embed/HbxkZ3xjIQk?si=CT1p6-zhR-OeYmOe" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen>
+
+        </iframe>
         </div>
       </div>
 
