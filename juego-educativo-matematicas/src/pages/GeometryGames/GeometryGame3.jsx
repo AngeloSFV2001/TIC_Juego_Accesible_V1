@@ -1,47 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import '../../index.css';
-import '../styles/Games.css';
 
 const GeometryGameArea = () => {
+  const exercises = [
+    {
+      figure: 'Cuadrado',
+      description: '¿Cuál es el área de un cuadrado con lados de 6 cm?',
+      src: ('/images/AreaCuadrado.png'),
+      correctAnswer: 36,
+      explanation: 'El área de un cuadrado se calcula multiplicando lado x lado.',
+    },
+    {
+      figure: 'Rectángulo',
+      description: '¿Cuál es el área de un rectángulo con base 7 cm y altura 4 cm?',
+      src: ('/images/AreaRectangulo.png'),
+      correctAnswer: 28,
+      explanation: 'El área de un rectángulo se calcula multiplicando base x altura.',
+    },
+    {
+      figure: 'Triángulo',
+      description: '¿Cuál es el área de un triángulo con base 12 cm y altura 7 cm?',
+      src: ('/images/AreaTriangulo.png'),
+      correctAnswer: 84,
+      explanation: 'El área de un triángulo se calcula como (base x altura) / 2.',
+    },
+  ];
+
+  const [currentExercise, setCurrentExercise] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [feedback, setFeedback] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [locked, setLocked] = useState(true);
   const [options, setOptions] = useState([]);
-  const [startTime, setStartTime] = useState(Date.now());
   const [background, setBackground] = useState('default-game');
-  const navigate = useNavigate();
 
-  const sideLength = 7; // Tamaño del lado del cuadrado en cm
-  const correctAnswer = sideLength * sideLength; // Área correcta del cuadrado
+  const exercise = exercises[currentExercise];
 
-  useEffect(() => {
+  const generateOptions = () => {
     const incorrectAnswers = [
-      correctAnswer - Math.floor(Math.random() * 10 + 1),
-      correctAnswer + Math.floor(Math.random() * 10 + 1),
+      exercise.correctAnswer - Math.floor(Math.random() * 10 + 1),
+      exercise.correctAnswer + Math.floor(Math.random() * 10 + 1),
     ];
-    setOptions(
-      [correctAnswer, ...incorrectAnswers].sort(() => Math.random() - 0.5)
-    );
+    return [
+      exercise.correctAnswer,
+      ...incorrectAnswers,
+    ].sort(() => Math.random() - 0.5);
+  };
+
+  React.useEffect(() => {
+    setOptions(generateOptions());
     setSelectedAnswer(null);
     setFeedback('');
     setLocked(true);
     setBackground('default-game');
-  }, []);
+  }, [currentExercise]);
 
   const handleAnswer = (answer) => {
     setSelectedAnswer(answer);
     setLocked(false);
-    if (answer === correctAnswer) {
-      setFeedback('¡Correcto! El área de un cuadrado se calcula como lado x lado.');
+    if (answer === exercise.correctAnswer) {
+      setFeedback('¡Correcto! ' + exercise.explanation);
       setBackground('correct');
     } else {
-      setFeedback(
-        'Incorrecto. Recuerda que el área de un cuadrado se obtiene multiplicando la longitud de uno de sus lados por sí mismo.'
-      );
+      setFeedback('Incorrecto. ' + exercise.explanation);
       setBackground('incorrect');
     }
     setShowModal(true);
@@ -52,22 +75,17 @@ const GeometryGameArea = () => {
     setFeedback('');
     setLocked(true);
     setBackground('default-game');
-    setStartTime(Date.now());
+    closeModal();
   };
 
   const handleNext = () => {
-    const endTime = Date.now();
-    const elapsedTime = Math.round((endTime - startTime) / 1000);
-
-    localStorage.setItem('geometry-game-area', JSON.stringify({
-      figure: 'Cuadrado',
-      sideLength,
-      correctAnswer,
-      userAnswer: selectedAnswer,
-      timeTaken: elapsedTime,
-    }));
-
-    navigate('/next-geometry-game');
+    if (currentExercise < exercises.length - 1) {
+      setCurrentExercise(currentExercise + 1);
+    } else {
+      alert('¡Felicidades! Completaste todos los niveles.');
+      setCurrentExercise(0); // Reiniciar el juego si se desea.
+    }
+    closeModal();
   };
 
   const closeModal = () => setShowModal(false);
@@ -75,25 +93,25 @@ const GeometryGameArea = () => {
   return (
     <div className={`container-fluid bg-${background}`}>
       <div className="container my-5 text-center">
-        <h1
-          className="mb-4"
+        <h2
+          className="mb-3"
           style={{ fontSize: '2.5rem' }}
           tabIndex="0"
-          aria-label="¿Qué valor tiene el área de esta figura?"
+          aria-label={exercise.description}
         >
-          ¿Qué valor tiene el área de esta figura?
-        </h1>
+          {exercise.description}
+        </h2>
 
         {/* Imagen de la figura */}
-        <img
-          src={require('../../assets/imagen.png')}
-          alt="Cuadrado con lados de 7 cm"
-          className="mb-4"
-          style={{ maxWidth: '300px' }}
+        <img tabIndex={'0'}
+          src={exercise.src}
+          alt={exercise.figure}
+          className="mb-2"
+          style={{ maxWidth: '250px', maxHeight: '230px'}}
         />
 
         {/* Opciones de respuesta */}
-        <div className="d-flex justify-content-center my-4">
+        <div className="d-flex justify-content-center my-2">
           {options.map((option, index) => (
             <button
               key={index}
@@ -127,9 +145,9 @@ const GeometryGameArea = () => {
             onClick={handleNext}
             disabled={locked || selectedAnswer === null}
             tabIndex="0"
-            aria-label="Seguir al siguiente juego"
+            aria-label="Siguiente ejercicio"
           >
-            Seguir
+            {currentExercise < exercises.length - 1 ? 'Siguiente' : 'Finalizar'}
           </button>
         </div>
 
@@ -145,7 +163,7 @@ const GeometryGameArea = () => {
           </Modal.Header>
           <Modal.Body>
             <p
-              className="mt-3"
+              className="mt-1"
               style={{ fontSize: '1.5rem' }}
               tabIndex="0"
               aria-live="assertive"
@@ -169,9 +187,9 @@ const GeometryGameArea = () => {
               onClick={handleNext}
               disabled={locked || selectedAnswer === null}
               tabIndex="0"
-              aria-label="Seguir al siguiente juego"
+              aria-label="Siguiente ejercicio"
             >
-              Seguir
+              {currentExercise < exercises.length - 1 ? 'Siguiente' : 'Finalizar'}
             </Button>
             <Button
               className="btn btn-danger mx-2"

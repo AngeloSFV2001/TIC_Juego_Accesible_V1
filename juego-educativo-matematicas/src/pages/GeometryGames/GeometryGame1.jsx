@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import '../../index.css';
+import { useNavigate } from 'react-router-dom';
 
 const AccessibleTableGame = () => {
   const [selectedPerimeter, setSelectedPerimeter] = useState(null);
@@ -9,6 +10,7 @@ const AccessibleTableGame = () => {
   const [currentGame, setCurrentGame] = useState(1);
   const [gameCompleted, setGameCompleted] = useState(false);
   const [canProceed, setCanProceed] = useState(false);
+  const navigate = useNavigate();
 
   const games = [
     { correctPerimeter: 12, label: 'Figura 1', gridSize: 5 },
@@ -23,8 +25,8 @@ const AccessibleTableGame = () => {
     const isCorrect = parseInt(selectedPerimeter, 10) === currentFigure.correctPerimeter;
     setFeedback(
       isCorrect
-        ? `¡Correcto! El perímetro de la figura es ${currentFigure.correctPerimeter} cm.`
-        : `Incorrecto. El perímetro correcto es ${currentFigure.correctPerimeter} cm, pero seleccionaste ${selectedPerimeter} cm.`
+        ? `¡Correcto! Puedes pasar al siguiente nivel. Recuerda el perimetro es la distancia que rodea la figura.`
+        : `Incorrecto. Recuerda el perimetro es la distancia que rodea la figura. Puedes ayudarte recreando el borde de la imagen en una hoja e ir contando las lineas.`
     );
     setShowModal(true);
     setCanProceed(isCorrect);
@@ -43,14 +45,21 @@ const AccessibleTableGame = () => {
       reloadGame();
     } else {
       setGameCompleted(true);
+      navigate('/juego-figuras-2');
     }
   };
 
   const renderFeedbackGrid = (gridSize) => (
     <table
       className="border border-dark"
-      aria-label="Tabla de retroalimentación mostrando un ejemplo de figura"
-      style={{ borderCollapse: 'collapse', margin: '0 auto', width: '200px' }}
+      aria-label="Tabla de retroalimentación con un ejemplo de figura"
+      tabIndex={'0'}
+      style={{ 
+        borderCollapse: 'collapse', 
+        margin: '0 auto', 
+        width: '200px',
+        border: 'solid black' 
+      }}
     >
       <tbody>
         {[...Array(gridSize)].map((_, rowIndex) => (
@@ -59,6 +68,10 @@ const AccessibleTableGame = () => {
               <td
                 key={`${rowIndex}-${colIndex}`}
                 className="border"
+                tabIndex="0"
+                data-row={rowIndex}
+                data-col={colIndex}
+                onKeyDown={(e) => handleKeyNavigation(e, rowIndex, colIndex, gridSize)}
                 style={{
                   width: '40px',
                   height: '40px',
@@ -66,10 +79,11 @@ const AccessibleTableGame = () => {
                     gridSize === 5
                       ? (rowIndex === 2 || colIndex === 2) &&
                         !(rowIndex === 0 || rowIndex === gridSize - 1 || colIndex === 0 || colIndex === gridSize - 1)
+                        || (colIndex === 3)
                         ? 'green'
                         : 'white'
                       : (rowIndex === 1 || rowIndex === gridSize - 2) &&
-                        (colIndex === 1 || colIndex === gridSize - 2)
+                        (colIndex === 1 || colIndex === gridSize - 2) 
                       ? 'blue'
                       : 'white',
                 }}
@@ -77,12 +91,13 @@ const AccessibleTableGame = () => {
                   gridSize === 5
                     ? (rowIndex === 2 || colIndex === 2) &&
                       !(rowIndex === 0 || rowIndex === gridSize - 1 || colIndex === 0 || colIndex === gridSize - 1)
+                      || (colIndex === 3)
                       ? `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Color verde`
                       : `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Vacío`
                     : (rowIndex === 1 || rowIndex === gridSize - 2) &&
                       (colIndex === 1 || colIndex === gridSize - 2) 
-                    ? `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Color azul`
-                    : `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Vacío`
+                      ? `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Color azul`
+                      : `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Vacío`
                 }
               ></td>
             ))}
@@ -95,8 +110,9 @@ const AccessibleTableGame = () => {
   const renderGrid = (gridSize) => (
     <table
       className="border border-dark"
-      aria-label={`Tabla accesible representando la figura ${currentFigure.label}`}
+      aria-label={`Tabla de ejercicio a resolver de la figura ${currentFigure.label}`}
       style={{ borderCollapse: 'collapse' }}
+      tabIndex={'0'}
     >
       <tbody>
         {[...Array(gridSize)].map((_, rowIndex) => (
@@ -174,13 +190,13 @@ const AccessibleTableGame = () => {
   };
 
   return (
-    <div className="container-fluid bg-light pt-5">
+    <div className="container-fluid bg-default pt-5">
       <div className="text-center mt-5">
         <h1 className="mb-4" tabIndex="0">
           {`Juego ${currentGame}: Calcula el perímetro de la figura`}
         </h1>
         <h4 tabIndex="0">
-          {`Cada cuadro mide 1 centímetro x 1 centímetro. Figura: ${currentFigure.label}`}
+          {`Cada cuadro mide un centímetro por un centímetro.`}
         </h4>
         <div className="d-flex justify-content-center mt-4">{renderGrid(currentFigure.gridSize)}</div>
         <div className="mt-4">

@@ -16,16 +16,14 @@ const MathIntro = () => {
       <div className="mb-4" style={{ width: '100%', maxWidth: '800px' }}>
         <div className="ratio ratio-16x9">
         <iframe 
-          width="560" 
-          height="315" 
-          src="https://www.youtube.com/embed/HbxkZ3xjIQk?si=CT1p6-zhR-OeYmOe" 
-          title="YouTube video player" 
-          frameborder="0" 
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-          referrerpolicy="strict-origin-when-cross-origin" 
-          allowfullscreen>
-
-        </iframe>
+        width="560" 
+        height="315" 
+        src="https://www.youtube.com/embed/wYNvY_bOGdc?si=Gax_JYbClPeYRp8Q" 
+        title="YouTube video player" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen></iframe>
         </div>
       </div>
 
