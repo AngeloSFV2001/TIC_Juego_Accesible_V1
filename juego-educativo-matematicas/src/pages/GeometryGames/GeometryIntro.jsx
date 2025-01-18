@@ -15,10 +15,7 @@ const MathIntro = () => {
       {/* Video responsivo */}
       <div className="mb-4" style={{ width: '100%', maxWidth: '800px' }}>
         <div className="ratio ratio-16x9">
-        <iframe 
-        width="560" 
-        height="315" 
-        src="https://www.youtube.com/embed/wYNvY_bOGdc?si=Gax_JYbClPeYRp8Q" 
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/NwzkZnhIXfk?si=ioCCblg28MshPK7O" 
         title="YouTube video player" 
         frameborder="0" 
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
