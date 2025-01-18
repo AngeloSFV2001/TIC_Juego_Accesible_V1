@@ -10,7 +10,7 @@ const MathIntro = () => {
 
   return (
     <main className="container d-flex flex-column justify-content-center align-items-center min-vh-80 text-center">
-      <h1 className="mb-4" tabIndex="0">Bienvenido a Operaciones Matemáticas con todas las operaciones</h1>
+      <h1 className="mb-4" tabIndex="0">Bienvenido a figuras geométricas</h1>
       
       {/* Video responsivo */}
       <div className="mb-4" style={{ width: '100%', maxWidth: '800px' }}>

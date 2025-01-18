@@ -32,7 +32,7 @@ const Navbar = () => {
             <ul className="navbar-nav me-5 mt-1">
               <li className="nav-item">
                 <Link  className="nav-link nav-equal-width text-end"
-              to="https://www.youtube.com/"
+              to="https://youtube.com/@angelofabara7351?si=QIvQ6z2C2GwZuXK2"
               target="_blank"
               rel="noopener noreferrer">Ayuda</Link>
               </li>
