@@ -23,7 +23,7 @@ const GeometryGameArea = () => {
       figure: 'Triángulo',
       description: '¿Cuál es el área de un triángulo con base 12 cm y altura 7 cm?',
       src: ('/images/AreaTriangulo.png'),
-      correctAnswer: 84,
+      correctAnswer: 42,
       explanation: 'El área de un triángulo se calcula como (base x altura) / 2.',
     },
   ];
