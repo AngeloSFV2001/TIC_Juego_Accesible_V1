@@ -76,14 +76,14 @@ const MathGame3 = () => {
   const closeModal = () => setShowModal(false);
 
   const handleNext = () => {
-    if (nextEnabled) navigate('/math-game-4');
+    if (nextEnabled) navigate('/inicio');
   };
 
   return (
     <div className="container-fluid bg-default">
       <div className="container my-8">
         <h1 className="text-center mb-5 mt-5" aria-label="Resuelve las divisiones" tabIndex="0">
-          Resuelve las divisiones
+          Resuelve las divisiones 
         </h1>
         <div className="row justify-content-center">
           {operations.map((operation, index) => (
