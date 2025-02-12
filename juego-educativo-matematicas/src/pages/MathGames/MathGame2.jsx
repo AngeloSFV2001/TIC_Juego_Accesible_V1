@@ -105,7 +105,7 @@ const MathGame2 = () => {
 
   const renderComboBox = (label, value, onChange) => (
     <div className="col-2 text-center">
-      <label>{label}</label>
+      <label aria-label={`cantidad de ${label}`}>{label}</label>
       <select
         className="form-select border border-secondary"
         value={value}

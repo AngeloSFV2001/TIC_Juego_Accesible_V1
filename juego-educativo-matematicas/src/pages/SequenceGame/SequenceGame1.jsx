@@ -117,7 +117,7 @@ const SequenceGame1 = () => {
   return (
     <div className={`container-fluid bg-${background} `}>
       <div className="container mt-3 text-center vh-100">
-        <h2 className="mt-2" tabIndex="0">Seleccione la opción que sigue en la sucesión</h2>
+        <h1 className="mt-2" tabIndex="0">Seleccione la opción que sigue en la sucesión</h1>
         <div className="mt-2 ms-5 d-flex justify-content-center align-items-center "
           tabIndex="0"
           aria-label={`Secuencia actual: ${currentSeq.sequence.join(', ')}. ¿Cuál número sigue?`}
