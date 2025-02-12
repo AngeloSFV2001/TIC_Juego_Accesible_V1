@@ -88,7 +88,7 @@ const MathGame1Subtraction = () => {
       <table className="text-end w-100">
         <tbody>
           <tr>
-            <td>{num1.toString().padStart(3, ' ')}</td>
+            <td><span aria-hidden="true">{num1.toString().padStart(3, ' ')}</span></td>
           </tr>
           <tr>
             <td>
