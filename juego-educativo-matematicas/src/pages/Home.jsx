@@ -16,7 +16,7 @@ const Home = () => {
             style={{ width: '250px', height: '250px', borderRadius: '15px', backgroundColor: '#0033cc' }}
             aria-label="Operaciones Básicas"
           >
-            <img src="/images/math.png" alt="Operaciones Básicas" className="img-fluid mb-2" style={{ maxWidth: '150px' }} />
+            <img src="/images/math.png" alt="" className="img-fluid mb-2" style={{ maxWidth: '150px' }} />
             <span>Operaciones Matemáticas</span>
           </Link>
         </div>
@@ -29,7 +29,7 @@ const Home = () => {
             style={{ width: '250px', height: '250px', borderRadius: '15px', backgroundColor: '#9900cc' }}
             aria-label="Sucesiones"
           >
-            <img src="/images/sequence.png" alt="Sucesiones" className="img-fluid mb-2" style={{ maxWidth: '150px' }} />
+            <img src="/images/sequence.png" alt="" className="img-fluid mb-2" style={{ maxWidth: '150px' }} />
             <span>Sucesiones</span>
           </Link>
         </div>
@@ -44,7 +44,7 @@ const Home = () => {
             style={{ width: '250px', height: '250px', borderRadius: '15px', backgroundColor: '#339933' }}
             aria-label="Geometría"
           >
-            <img src="/images/geometry.png" alt="Geometría" className="img-fluid mb-2" style={{ maxWidth: '150px' }} />
+            <img src="/images/geometry.png" alt="" className="img-fluid mb-2" style={{ maxWidth: '150px' }} />
             <span>Geometría</span>
           </Link>
         </div>

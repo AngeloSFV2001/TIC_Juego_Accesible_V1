@@ -4,13 +4,11 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import '../../index.css';
 
-// Importa las imágenes
 import Cuadrado from '/images/Cuadrado.png';
 import Rectangulo from '/images/rectangulo.png';
 import Triangulo from '/images/triangulo.png';
 import Rombo from '/images/rombo.png';
 
-// Datos de las figuras y fórmulas
 const figures = [
   { id: 1, name: 'Cuadrado', image: Cuadrado, formula: 'lado por lado',descripcion:'incluye etiquetas de lado' },
   { id: 2, name: 'Rectángulo', image: Rectangulo, formula: 'base por altura',descripcion:'incluye etiqutas de base y altura' },
@@ -18,7 +16,6 @@ const figures = [
   { id: 4, name: 'Rombo', image: Rombo, formula: '(D.mayor por d.menor) dividido para 2',descripcion:'incluye etiquetas como d mayuscula de diagonal mayor y d miniuscula como diagonal menor' },
 ];
 
-// Fórmulas visuales
 const formulas = [
   'lado por lado',
   'base por altura',
@@ -109,7 +106,7 @@ const GeometryGame = () => {
                     <option
                       key={index}
                       value={formula}
-                      aria-label={figures[index]?.formula || formula} // Personaliza cómo el lector de pantalla lee esta opción
+                      aria-label={figures[index]?.formula || formula} 
                     >
                       {formula}
                     </option>
@@ -142,7 +139,7 @@ const GeometryGame = () => {
             <Button
               variant="success"
               onClick={handleNext}
-              disabled={!canProceed} // Botón deshabilitado si las respuestas no son correctas
+              disabled={!canProceed} 
               tabIndex="0"
               aria-label="Ir al siguiente juego"
             >

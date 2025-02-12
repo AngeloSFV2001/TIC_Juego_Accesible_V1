@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../pages/styles/Navbar.css'; // Archivo CSS para estilos personalizados
+import '../pages/styles/Navbar.css'; 
 
 const Navbar = () => {
   return (
@@ -9,7 +9,7 @@ const Navbar = () => {
         <div className="d-flex justify-content-between w-100">
           <div>
             <Link className="navbar-brand ms-5" to="/">
-              <img src="../images/logo.png" alt="Logo" className="navbar-logo" />
+              <img src="../images/logo.png" alt="Matepa" className="navbar-logo" />
             </Link>
           </div>
           <div className="collapse navbar-collapse justify-content-center" id="navbarNav">
