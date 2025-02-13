@@ -51,14 +51,14 @@ const AccessibleTableGame = () => {
 
   const renderFeedbackGrid = (gridSize) => (
     <table
-      className="border border-dark"
+      className="border-dark"
       aria-label="Tabla de retroalimentación con un ejemplo de figura"
       tabIndex={'0'}
       style={{ 
         borderCollapse: 'collapse', 
         margin: '0 auto', 
         width: '200px',
-        border: 'solid black' 
+        border: '3px solid black'
       }}
     >
       <tbody>
@@ -84,7 +84,7 @@ const AccessibleTableGame = () => {
                         : 'white'
                       : (rowIndex === 1 || rowIndex === gridSize - 2) &&
                         (colIndex === 1 || colIndex === gridSize - 2) 
-                      ? 'blue'
+                      ? 'green'
                       : 'white',
                 }}
                 aria-label={
@@ -96,7 +96,7 @@ const AccessibleTableGame = () => {
                       : `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Vacío`
                     : (rowIndex === 1 || rowIndex === gridSize - 2) &&
                       (colIndex === 1 || colIndex === gridSize - 2) 
-                      ? `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Color azul`
+                      ? `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Color verde`
                       : `Ejemplo fila ${rowIndex + 1}, columna ${colIndex + 1} Vacío`
                 }
               ></td>
@@ -109,10 +109,13 @@ const AccessibleTableGame = () => {
 
   const renderGrid = (gridSize) => (
     <table
-      className="border border-dark"
+      className="border-dark"
       aria-label={`Tabla de ejercicio a resolver de la figura ${currentFigure.label}`}
-      style={{ borderCollapse: 'collapse' }}
+      style={{ borderCollapse: 'collapse',
+                border: '2px solid black'
+      }}
       tabIndex={'0'}
+      
     >
       <tbody>
         {[...Array(gridSize)].map((_, rowIndex) => (
@@ -136,7 +139,7 @@ const AccessibleTableGame = () => {
                         : 'white'
                       : (rowIndex === 1 || rowIndex === gridSize - 2) &&
                         (colIndex === 1 || colIndex === gridSize - 2) || (colIndex === 2 )
-                      ? 'blue'
+                      ? 'green'
                       : 'white',
                 }}
                 aria-label={
@@ -147,7 +150,7 @@ const AccessibleTableGame = () => {
                       : `fila ${rowIndex + 1}, columna ${colIndex + 1} Vacío`
                     : (rowIndex === 1 || rowIndex === gridSize - 2) &&
                       (colIndex === 1 || colIndex === gridSize - 2) || (colIndex === 2 )
-                    ? `fila ${rowIndex + 1}, columna ${colIndex + 1} Color azul`
+                    ? `fila ${rowIndex + 1}, columna ${colIndex + 1} Color verde`
                     : `fila ${rowIndex + 1}, columna ${colIndex + 1} Vacío`
                 }
               ></td>
@@ -192,12 +195,12 @@ const AccessibleTableGame = () => {
   return (
     <div className="container-fluid bg-default pt-5">
       <div className="text-center mt-5">
-        <h1 className="mb-4" tabIndex="0">
+        <h1 className="mb-4" tabIndex="0" aria-label='Calcula el perímetro de la figura que se presentara en una tabla de 5 centimetro por 5 centímetros'>
           {`Juego ${currentGame}: Calcula el perímetro de la figura`}
         </h1>
-        <h4 tabIndex="0">
+        <h2 tabIndex="0" aria-label='Cada cuadro de la tabla mide un centímetro por un centímetro. Cuando diga vacío no se llena la tabla y color verde si se llena el cuadro'>
           {`Cada cuadro mide un centímetro por un centímetro.`}
-        </h4>
+        </h2>
         <div className="d-flex justify-content-center mt-4">{renderGrid(currentFigure.gridSize)}</div>
         <div className="mt-4">
           <label htmlFor="perimeter-select" className="me-2">

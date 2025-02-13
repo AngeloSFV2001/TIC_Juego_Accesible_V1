@@ -107,7 +107,7 @@ const SequenceGame1 = () => {
           fontSize: '1.2rem',
           fontWeight: 'bold',
           marginLeft: `${margen}%`,
-        }}><p className="d-flex ">{num}</p></div>
+        }}><h2 className="d-flex ">{num}</h2></div>
       </div>
     );
   };
@@ -163,14 +163,14 @@ const SequenceGame1 = () => {
             <Modal.Title id="resultado-modal">Resultado</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-          <p
+          <h2
               className="mt-3"
               style={{ fontSize: '1.5rem' }}
               tabIndex="0"
               aria-live="assertive"
             >
               {feedback}
-            </p>
+            </h2>
            <p
               className="mt-3 text-center"
               style={{ fontSize: '1.5rem' }}

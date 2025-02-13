@@ -11,9 +11,9 @@ import Rombo from '/images/rombo.png';
 
 const figures = [
   { id: 1, name: 'Cuadrado', image: Cuadrado, formula: 'lado por lado',descripcion:'incluye etiquetas de lado' },
-  { id: 2, name: 'Rectángulo', image: Rectangulo, formula: 'base por altura',descripcion:'incluye etiqutas de base y altura' },
+  { id: 2, name: 'Rectángulo', image: Rectangulo, formula: 'base por altura',descripcion:'incluye etiquetas de base y altura' },
   { id: 3, name: 'Triángulo', image: Triangulo, formula: '(base por altura) dividido para 2',descripcion:'incluye etiquetas de base y altura' },
-  { id: 4, name: 'Rombo', image: Rombo, formula: '(D.mayor por d.menor) dividido para 2',descripcion:'incluye etiquetas como d mayuscula de diagonal mayor y d miniuscula como diagonal menor' },
+  { id: 4, name: 'Rombo', image: Rombo, formula: '(D.mayor por d.menor) dividido para 2',descripcion:'incluye etiquetas como d mayuscula de diagonal mayor y d miniuscula para diagonal menor' },
 ];
 
 const formulas = [
@@ -78,9 +78,9 @@ const GeometryGame = () => {
   return (
     <div className="container-fluid bg-default">
       <div className="container my-8">
-        <h2 className="text-center mb-4 mt-5" aria-label="Conecta las fórmulas del área con las figuras correspondientes" tabIndex="0">
+        <h1 className="text-center mb-4 mt-5" aria-label="Conecta las fórmulas del área con las figuras correspondientes" tabIndex="0">
           Conecta las fórmulas del área con las figuras correspondientes
-        </h2>
+        </h1>
         <div className="row justify-content-center">
           {figures.map((figure) => (
             <div key={figure.id} className="row mb-1 justify-content-center align-items-center">

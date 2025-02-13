@@ -63,14 +63,16 @@ const SequenceGame2 = () => {
         <div className="text-center my-4">
           <img
             src={exercises[currentExercise].image}
-            alt={`La secuencia de ejercicio es ${exercises[currentExercise].texto}, identifique la operación que hace verdadera la sucesión`}
+            alt={`La secuencia del ejercicio es ${exercises[currentExercise].texto}, ¿Cuál es la operación para la sucesión`}
             style={{ width: "90%", maxWidth: "550px", height: "auto" }}
             tabIndex={'0'}
           />
         </div>
 
         <div className="text-center my-3">
+          <label for={`sucesion`} aria-label={`En el cuadro posterior seleccione la operación que resuelva la sucesión`}>Selecciona la operación que hace verdera la Operaciones</label>
           <select
+            id={`sucesion`}
             className="form-select w-50 mx-auto"
             value={selectedOperation}
             onChange={(e) => setSelectedOperation(e.target.value)}

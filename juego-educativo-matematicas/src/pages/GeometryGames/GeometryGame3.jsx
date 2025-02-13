@@ -82,25 +82,24 @@ const GeometryGameArea = () => {
     if (currentExercise < exercises.length - 1) {
       setCurrentExercise(currentExercise + 1);
     } else {
-      alert('¡Felicidades! Completaste todos los niveles.');
-      setCurrentExercise(0); // Reiniciar el juego si se desea.
+      handleNextInicio; 
     }
     closeModal();
   };
-
+  
   const closeModal = () => setShowModal(false);
 
   return (
     <div className={`container-fluid bg-${background}`}>
       <div className="container my-5 text-center">
-        <h2
+        <h1
           className="mb-3"
           style={{ fontSize: '2.5rem' }}
           tabIndex="0"
           aria-label={exercise.description}
         >
           {exercise.description}
-        </h2>
+        </h1>
 
         {/* Imagen de la figura */}
         <img tabIndex={'0'}
